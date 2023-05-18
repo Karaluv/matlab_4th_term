@@ -1,26 +1,13 @@
-function M = cosmo_matrix(P, S)
-    n = size(P, 1);
-    M = zeros(n, n);
-
-    % Calculate diagonal elements of M
-    for i = 1:n
-        % Approximate surface feature around vertex i as a flat round surface
-        % element with area S(i) and calculate potential in its middle
-        M(i, i) = S(i) / (4 * pi);
-    end
-
-    % Calculate non-diagonal elements of M
-    for i = 1:n
-
-        for j = i + 1:n
-            % Calculate distance between vertices i and j
-            r = norm(P(i, :) - P(j, :));
-
-            % Calculate interaction between surface charges at vertices i and j
-            M(i, j) = 1 / r;
-            M(j, i) = M(i, j);
+function M = cosmo_matrix(P,S)
+n = size(P);
+n = n(1);
+M = zeros(n, n);
+for k = 1:n
+    for l = 1:n
+        if k == l 
+            M(k, l) = 2*sqrt(pi*S(l));
+        else
+        M(k, l) = S(l)/sqrt(sum((P(k, :)- P(l, :)).^2));
         end
-
     end
-
 end
